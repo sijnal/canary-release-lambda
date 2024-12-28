@@ -1,6 +1,5 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-
 Resources:
   MyLambdaFunction:
     Type: AWS::Serverless::Function
@@ -8,16 +7,13 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.12
       CodeUri: functions/mainFunction/
-
       AutoPublishAlias: live
-
       DeploymentPreference:
-        Type: Canary10Percent10Minutes 
+        Type: Canary10Percent10Minutes
         Alarms:
-          - !Ref AliasErrorMetricGreaterThanZeroAlarm
-          - !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
+          - AliasErrorMetricGreaterThanZeroAlarm
+          - LatestVersionErrorMetricGreaterThanZeroAlarm
         Hooks:
-          PreTraffic: !Ref PreTrafficLambdaFunction
-          PostTraffic: !Ref PostTrafficLambdaFunction
-
+          PreTraffic: PreTrafficLambdaFunction
+          PostTraffic: PostTrafficLambdaFunction
 
