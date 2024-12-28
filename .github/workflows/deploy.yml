@@ -37,4 +37,4 @@ jobs:
         run: |
           sam validate
           sam build
-          sam deploy --no-confirm-changeset --stack-name canary-deploy --capabilities CAPABILITY_IAM
+          sam deploy --no-confirm-changeset --stack-name canary-deploy --capabilities CAPABILITY_IAM --resolve-s3
