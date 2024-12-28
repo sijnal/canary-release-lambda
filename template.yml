@@ -10,55 +10,5 @@ Resources:
       AutoPublishAlias: live
       DeploymentPreference:
         Type: Canary10Percent10Minutes
-        Alarms:
-          - AliasErrorMetricGreaterThanZeroAlarm
-          - LatestVersionErrorMetricGreaterThanZeroAlarm
-        Hooks:
-          PreTraffic: PreTrafficLambdaFunction
-          PostTraffic: PostTrafficLambdaFunction
 
-  PreTrafficLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: pre_traffic_lambda.lambda_handler
-      Runtime: python3.12
-      CodeUri: functions/preTraffic/
-  
-  PostTrafficLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: post_traffic_lambda.lambda_handler
-      Runtime: python3.12
-      CodeUri: functions/postTraffic/
 
-  AliasErrorMetricGreaterThanZeroAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: AliasErrorMetricGreaterThanZeroAlarm
-      MetricName: Errors
-      Namespace: AWS/Lambda
-      Statistic: Sum
-      Period: 60
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref MyLambdaFunction
-        - Name: Resource
-          Value: !Join [":", [!Ref MyLambdaFunction, "live"]]
-
-  LatestVersionErrorMetricGreaterThanZeroAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: LatestVersionErrorMetricGreaterThanZeroAlarm
-      MetricName: Errors
-      Namespace: AWS/Lambda
-      Statistic: Sum
-      Period: 60
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref MyLambdaFunction
